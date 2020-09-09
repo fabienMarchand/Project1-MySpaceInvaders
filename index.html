@@ -8,7 +8,7 @@
 
   <div class="title">
     <h3 id="result">Score < 1 > 
-    <p>000</p></h3>
+    <p id="p">000</p></h3>
 
     <div id="hi-score">HI-SCORE: 1 114 020    </div>
     <div id="lives-hold">
@@ -20,8 +20,18 @@
 
   <div id="game_window">
     <div id="box"  style="display: none;"></div>
+    <div id="win-screen" style="display: none;">
+      <h1>WINNER</h1>
+      <h2>YOU HAVE DEFENDED EARTH</h2>
+      <h2>Please insert coin to do it again</h2>
+    </div>
+    <div id="lose-screen" style="display: none;">
+      <h1 style='font-size: 3rem'>GAME OVER</h1>
+      <h2>HUMAN THE INVASION IS NOWWW !!!</h2>
+      <h2>Don't Panic insert coin to try again</h2>
+    </div>
 
-    <div id="welcome-screen">
+    <div id="welcome-screen" >
       <h1 style='font-size: 3rem'>SPACE INVADERS ReMATCH</h1>
       <h2>Press ENTER to begin</h2>
       <div class="instructions-hold">
@@ -31,14 +41,13 @@
           <li>Space to shoot</li>
         </ul>
       </div>
-      
       <div class="scores-example">
         <div class="scores-example-row">
-          <img src="./imgs/alien1.png" alt="" class="example-enemy">
-          <h2> = 20 points</h2>
+          <h2> <img src="./imgs/Enemy1.gif" alt="" class="example-enemy">
+          = 20 points</h2>
         </div>
         <div class="scores-example-row">
-          <img src="./imgs/alien3.png" alt="" class="example-enemy">
+          <!-- <img src="./imgs/alien3.png" alt="" class="example-enemy"> -->
           <h2> = 40 points</h2>
         </div>
       </div>
