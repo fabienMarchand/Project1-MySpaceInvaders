@@ -26,7 +26,7 @@ var alienInvaders = [
     { left: 730, top: 145 },
     { left: 800, top: 145 },
     { left: 870, top: 145 },
-    
+
     { left: 170, top: 190 },
     { left: 240, top: 190 },
     { left: 310, top: 190 },
@@ -46,12 +46,6 @@ let player = document.getElementById("box");
 const newGame = new World(world, world.offsetHeight, world.offsetWidth, alienInvaders);
 let welcome = document.getElementById("welcome-screen");
 
-// if( !newGame.gameOver){
-//   newGame.addAliens();
-//   newGame.startGame(player);
-// } else {
-//   console.log("You loose Human invasion have successed");
-// }
 const startGame = (e) => {
   if (e.keyCode === 13) {
     document.removeEventListener("keydown", startGame);
@@ -60,6 +54,19 @@ const startGame = (e) => {
     player.style.display = player.style.display === 'none' ? '' : 'none';
    // gameSection.style.display = gameSection.style.display === 'none' ? '' : 'none';
     welcome.style.display = "none";
+
+    console.log("win: ", newGame.win);
+    console.log("lose: ", newGame.gameOver);
+
+
+    // function repeatOften() {
+    //   console.log("win: ", newGame.win);
+    //   console.log("lose: ", newGame.gameOver);
+    //   requestAnimationFrame(repeatOften);
+    // }
+    // requestAnimationFrame(repeatOften);
+
+
   }
 }
 

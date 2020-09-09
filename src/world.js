@@ -44,7 +44,10 @@ export class World {
       player.style.display = 'none';
       let winScreen = document.getElementById("win-screen");
       winScreen.style.display = '';
+      const bulletArr = document.querySelectorAll(".bullet-box");
+      bulletArr.forEach(bullet => bullet.style.display = 'none');
     }
+    return this.win;
   }
 
   loseGame(){
@@ -55,6 +58,8 @@ export class World {
     alienArmy.forEach(alien => alien.style.display ='none');
     let winScreen = document.getElementById("lose-screen");
     winScreen.style.display = '';
+    const bulletArr = document.querySelectorAll(".bullet-box");
+    bulletArr.forEach(bullet => bullet.style.display = 'none');
   }
 }
 
@@ -92,9 +97,7 @@ class Player {
       let world = document.getElementById("game_window");
       let bullet = newBullet.style;
       let worldObj = new World();
-
       const alienArmy = [...document.querySelectorAll(".enemy-box")];
-
       let firstAlienTop = alienArmy[0].getBoundingClientRect().top + 30;
      
       if(firstAlienTop-100 > newBullet.getBoundingClientRect().top ){
@@ -114,8 +117,6 @@ class Player {
           worldObj.winGame();
         }
       });
-
-
     }
 
     let world = document.getElementById("game_window");
@@ -176,6 +177,7 @@ class Alien {
     this.width = width;
     this.newAlien = [];
     this.direction = 1;
+    this.playerLife = 3;
   }
 
   drawEnemy(alien, index) {
@@ -183,6 +185,72 @@ class Alien {
     newAlien.innerHTML += `<div class='enemy-box' id='${index}' style='left:${alien.left}px; top:${alien.top}px'></div>`;
     this.world.appendChild(newAlien);
   }
+
+  alienShoot() {
+    const alienArmy = document.querySelectorAll(".enemy-box");
+    function getRandomArbitrary(min, max) {
+      return Math.round(Math.random() * (max - min) + min);
+    };
+    let randomAlien = getRandomArbitrary(0, alienArmy.length);
+    let alientop = alienArmy[randomAlien].style.top;
+    let alienLeft = alienArmy[randomAlien].style.left;
+     console.log("alientop",alientop, "alienLeft", alienLeft, "alienId", randomAlien);
+    let world = document.getElementById("game_window");
+    const newAlienBullet = document.createElement("div");
+    newAlienBullet.classList.add("bullet-box");
+    newAlienBullet.innerHTML += `<div> </div>`;
+    newAlienBullet.style.top = alientop ;
+  // newAlienBullet.setAttribute("id", `test${id}`);
+     newAlienBullet.style.left = alienLeft ;
+   // id++;
+    world.appendChild(newAlienBullet);
+   
+    function alienBulletMove() {
+      var speed = 1;
+      var newAlienBulletMove = newAlienBullet.offsetTop;
+      if (newAlienBulletMove < 700) {
+        newAlienBullet.style.top = newAlienBulletMove + speed  + "px";
+      } else {
+        world.removeChild(newAlienBullet);
+        newAlienBullet.remove();  
+        clearInterval(idBullMove);
+      }
+    }
+
+    function alienHitPlayer(){
+      let world = document.getElementById("game_window");
+      let bullet = newAlienBullet.style;
+      let worldObj = new World();
+      let playerShip = document.getElementById("box");
+
+      if(newAlienBullet.getBoundingClientRect().top < playerShip.getBoundingClientRect().top +20 &&
+        newAlienBullet.getBoundingClientRect().top + 20 > playerShip.getBoundingClientRect().top &&
+        newAlienBullet.getBoundingClientRect().left < playerShip.getBoundingClientRect().left +20 &&
+        newAlienBullet.getBoundingClientRect().left + 20 > playerShip.getBoundingClientRect().left 
+        ){
+          let interval = setInterval(() => {
+            console.log("hit");
+            playerShip.style.display = "none";
+          }, 100);
+          setTimeout(() => {
+            clearInterval(interval);
+            playerShip.style.display = "";
+          }, 250);
+
+          console.log(this.playerLife );
+         
+      }
+     
+
+    }
+
+
+  var idBullMove = setInterval(() => {
+    alienBulletMove();
+    alienHitPlayer();
+  }, 1 / 100);
+}
+ 
 
   //move the alien invaders
   moveInvaders() {
@@ -192,6 +260,8 @@ class Alien {
     let firstAlienLeft = alienArmy[0].getBoundingClientRect().left + 30;
     let lastAlienRight = alienArmy[alienArmy.length - 1].getBoundingClientRect().left + 100;
     let worldObj = new World();
+    this.alienShoot();  
+    
     alienArmy.forEach((alien, index) => {
       const enemiesLeft = () => {
         if (alien.firstAlienLeft > 0) {
@@ -248,6 +318,6 @@ class Alien {
   // Interval cible:
   // invaderId = setInterval(() => this.moveInvaders(), 500);
   // Interval test:
-  invaderId = setInterval(() => this.moveInvaders(), 2000);
+  invaderId = setInterval(() => this.moveInvaders(), 5000);
   //clearInterval(invaderId);
 }
