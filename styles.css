@@ -1,9 +1,7 @@
 /* * {
       margin: 0px;
   } */
-
-@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap");
-
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 body {
   background-color: black;
 }
@@ -15,10 +13,10 @@ h3 {
   width: 1000px;
   height: 750px;
   background-color: black;
-  position: relative;
+  position: fixed;
   left: 20%;
   border: 2px solid green;
-  background: url("./imgs/space-bckg.jpg");
+  /* background: url("./imgs/space-bckg.jpg"); */
 }
 
 #box {
@@ -35,6 +33,18 @@ h3 {
   height: calc(65px / 2);
   animation: ship 0.5s steps(4) infinite;
 }
+
+#welcome-screen {
+  position: absolute;
+  color: white;
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  text-align: center;
+  font-family: 'Press Start 2P', cursive;
+}
+
+
 
 .bullet-box {
   width: 18px;
@@ -66,7 +76,7 @@ h3 {
 #hi-score {
   position: absolute;
   color: white;
-  font-family: "Source Code Pro", monospace;
+  font-family: 'Press Start 2P', cursive;
   font-size: 1.5rem;
   left: 40%;
   top: 5px;
@@ -75,7 +85,7 @@ h3 {
 #result {
   color: black;
   color: white;
-  font-family: "Source Code Pro", monospace;
+  font-family: 'Press Start 2P', cursive;
   font-size: 1.5rem;
   left: 20%;
   top: 5px;

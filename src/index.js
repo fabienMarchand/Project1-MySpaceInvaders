@@ -48,11 +48,11 @@ let world = document.getElementById("game_window");
 let player = document.getElementById("box");
 const newGame = new World(world, world.offsetHeight, world.offsetWidth, alienInvaders);
 
-if( !newGame.gameOver){
-  newGame.addAliens();
-  newGame.startGame(player);
-} else {
-  console.log("You loose Human invasion have successed");
-}
+// if( !newGame.gameOver){
+//   newGame.addAliens();
+//   newGame.startGame(player);
+// } else {
+//   console.log("You loose Human invasion have successed");
+// }
 
 
