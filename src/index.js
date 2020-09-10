@@ -45,6 +45,20 @@ let world = document.getElementById("game_window");
 let player = document.getElementById("box");
 const newGame = new World(world, world.offsetHeight, world.offsetWidth, alienInvaders);
 let welcome = document.getElementById("welcome-screen");
+let loseScreen = document.getElementById("lose-screen");
+
+
+
+    function repeatOften() {
+      if(loseScreen.style.display === "") {
+        player.style.display = 'none';
+       
+
+      }
+      requestAnimationFrame(repeatOften);
+    }
+    requestAnimationFrame(repeatOften);
+
 
 const startGame = (e) => {
   if (e.keyCode === 13) {
@@ -54,17 +68,10 @@ const startGame = (e) => {
     player.style.display = player.style.display === 'none' ? '' : 'none';
    // gameSection.style.display = gameSection.style.display === 'none' ? '' : 'none';
     welcome.style.display = "none";
-
-
-    // function repeatOften() {
-    //   console.log("win: ", newGame.win);
-    //   console.log("lose: ", newGame.gameOver);
-    //   requestAnimationFrame(repeatOften);
-    // }
-    // requestAnimationFrame(repeatOften);
-
-
+    
   }
 }
+
+
 
 document.addEventListener("keydown", startGame);

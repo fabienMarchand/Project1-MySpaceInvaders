@@ -24,6 +24,7 @@ export class World {
   }
 
   startGame(player) {
+    new Audio('../sounds/leap.midi').play();
     const ship = new Player();
     ship.health = 42;
     ship.player = player;
@@ -83,14 +84,6 @@ class Player {
     this.strength = strength;
     this.player = player;
     this.bullet = [];
-  }
-
-  getBulletPos() {
-    let bulletListArray = [...document.querySelectorAll(".bullet-box")];
-    let rect = "";
-    let newPlayer = new Player();
-
-    return bulletListArray;
   }
 
   createBullet(posX, posY, MAXUP_BORDER, id) {
@@ -188,8 +181,9 @@ class Player {
   }
 }
 
-class Alien {
+class Alien extends World {
   constructor(alienInvaders, world, height, width, alien) {
+    super(world, height, width, alienInvaders);
     this.alienInvaders = alienInvaders;
     this.world = world;
     this.height = height;
@@ -205,8 +199,9 @@ class Alien {
     this.world.appendChild(newAlien);
   }
 
-  alienShoot() {
-    const alienArmy = document.querySelectorAll(".enemy-box");
+  alienShoot(alienArmy, parent) {
+    //const alienArmy = document.querySelectorAll(".enemy-box");
+
     function getRandomArbitrary(min, max) {
       return Math.round(Math.random() * (max - min) + min);
     }
@@ -235,11 +230,12 @@ class Alien {
       }
     }
 
-    function alienHitPlayer() {
+    function alienHitPlayer(parent) {
       let world = document.getElementById("game_window");
       let bullet = newAlienBullet.style;
       let playerShip = document.getElementById("box");
       let livesHold = document.getElementById("lives-hold");
+      
       if (
         newAlienBullet.getBoundingClientRect().top <
           playerShip.getBoundingClientRect().top + 20 &&
@@ -253,40 +249,50 @@ class Alien {
         // supprime la balle
         newAlienBullet.remove();
         clearInterval(idBullMove);
-
         let classLives = document.querySelector(".class-lives");
         let livesHoldLenght = classLives.querySelectorAll(".heart").length;
-
-        if(livesHoldLenght > 0){
-          livesHold.removeChild(livesHold.firstElementChild);
-        }
-        
+        if(livesHoldLenght > 0) livesHold.removeChild(livesHold.firstElementChild);
+         
         let interval = setInterval(() => {
           playerShip.style.display = "none";
+          let classLiveslive = document.querySelector(".class-lives");
+          let livesHoldLenghtlive = classLiveslive.querySelectorAll(".heart")
+      
+         if(livesHoldLenghtlive.length > 0){
+         
+         } else {
+         
+          parent.loseGame();
+         }
         }, 100);
         setTimeout(() => {
           clearInterval(interval);
           playerShip.style.display = "";
+         
         }, 250);
       }
+     
     }
 
     var idBullMove = setInterval(() => {
       alienBulletMove();
-      alienHitPlayer();
+      alienHitPlayer(parent);
     }, 1 / 100);
   }
 
   //move the alien invaders
   moveInvaders() {
-    const alienArmy = document.querySelectorAll(".enemy-box");
+  //
+    const alienArmyFull = document.querySelectorAll(".enemy-box");
+    const alienArmy = [...alienArmyFull].filter((alien) => !alien.className.includes("hidden"));
+  //
+
     let direction = "down";
     let lastDirection = "";
     let firstAlienLeft = alienArmy[0].getBoundingClientRect().left + 30;
-    let lastAlienRight =
-      alienArmy[alienArmy.length - 1].getBoundingClientRect().left + 100;
-    let worldObj = new World();
-    this.alienShoot();
+    let lastAlienRight = alienArmy[alienArmy.length - 1].getBoundingClientRect().left + 100;
+  //  let worldObj = new World();
+    this.alienShoot(alienArmy, this);
 
     alienArmy.forEach((alien, index) => {
       const enemiesLeft = () => {
@@ -308,8 +314,10 @@ class Alien {
       };
 
       const enemiesDown = () => {
-        if (alien.style.top > 600 + "px") {
-          worldObj.loseGame();
+        if (alien.style.top+50 > 600 + "px") {
+          
+          this.loseGame();
+          
         } else {
           alien.style.top = alien.getBoundingClientRect().top + 1;
         }
