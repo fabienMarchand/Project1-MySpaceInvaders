@@ -47,15 +47,15 @@ const newGame = new World(world, world.offsetHeight, world.offsetWidth, alienInv
 let welcome = document.getElementById("welcome-screen");
 let loseScreen = document.getElementById("lose-screen");
 let winScreen = document.getElementById("win-screen");
-let bulletBox = document.querySelectorAll("bullet-box")
+const bulletArr = document.querySelectorAll(".bullet-box");
 
 function repeatOften() {
       if(loseScreen.style.display === "") {
         player.style.display = 'none';
-        console.log("tralala");
+
+        bulletArr.forEach((bullet) => (bullet.style.display = "none"));
       } else if( winScreen.style.display === ""){
         player.style.display = 'none';
-        const bulletArr = document.querySelectorAll(".bullet-box");
         bulletArr.forEach((bullet) => (bullet.style.display = "none"));
       }
       requestAnimationFrame(repeatOften);

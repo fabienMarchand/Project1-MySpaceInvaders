@@ -269,9 +269,6 @@ class Alien {
           const objWorld = new World();
           objWorld.loseGame();
           }
-
-
-
         }, 250);
       }
     }
