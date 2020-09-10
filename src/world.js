@@ -7,7 +7,7 @@ export class World {
     this.win = false;
     this.gameOver = false;
     this.score = 0;
-    
+    this.life = 3;
   }
 
   addAliens() {
@@ -30,36 +30,50 @@ export class World {
     ship.movePlayer();
   }
 
-  setScore(){
+  setScore() {
     let displayScore = document.getElementById("p");
     displayScore.textContent = this.score;
   }
 
-  winGame(){
+  getLife() {
+    console.log("don't talk to me about life: ", this.life);
+    return this.life;
+  }
+
+  setLife() {
+    this.life -= 1;
+    console.log("dah i'm dying b***: ", this.life);
+
+    return this.life;
+  }
+
+  winGame() {
     const alienArmy = [...document.querySelectorAll(".enemy-box")];
     const alienArmyHidden = [...document.querySelectorAll(".hidden")];
-    alienArmy.length === alienArmyHidden.length ? this.win = true : this.win = false
-    if(this.win){
+    alienArmy.length === alienArmyHidden.length
+      ? (this.win = true)
+      : (this.win = false);
+    if (this.win) {
       let player = document.getElementById("box");
-      player.style.display = 'none';
+      player.style.display = "none";
       let winScreen = document.getElementById("win-screen");
-      winScreen.style.display = '';
+      winScreen.style.display = "";
       const bulletArr = document.querySelectorAll(".bullet-box");
-      bulletArr.forEach(bullet => bullet.style.display = 'none');
+      bulletArr.forEach((bullet) => (bullet.style.display = "none"));
     }
     return this.win;
   }
 
-  loseGame(){
+  loseGame() {
     this.gameOver = true;
     let player = document.getElementById("box");
-    player.style.display = 'none';
+    player.style.display = "none";
     const alienArmy = document.querySelectorAll(".enemy-box");
-    alienArmy.forEach(alien => alien.style.display ='none');
+    alienArmy.forEach((alien) => (alien.style.display = "none"));
     let winScreen = document.getElementById("lose-screen");
-    winScreen.style.display = '';
+    winScreen.style.display = "";
     const bulletArr = document.querySelectorAll(".bullet-box");
-    bulletArr.forEach(bullet => bullet.style.display = 'none');
+    bulletArr.forEach((bullet) => (bullet.style.display = "none"));
   }
 }
 
@@ -70,7 +84,7 @@ class Player {
     this.player = player;
     this.bullet = [];
   }
-  
+
   getBulletPos() {
     let bulletListArray = [...document.querySelectorAll(".bullet-box")];
     let rect = "";
@@ -86,8 +100,8 @@ class Player {
       if (newBulletMove > MAXUP_BORDER) {
         newBullet.style.top = newBulletMove + speed * -1 + "px";
       } else {
-       // world.removeChild(newBullet);
-       newBullet.remove();  
+        // world.removeChild(newBullet);
+        newBullet.remove();
         clearInterval(idBullMove);
       }
     }
@@ -99,16 +113,21 @@ class Player {
       let worldObj = new World();
       const alienArmy = [...document.querySelectorAll(".enemy-box")];
       let firstAlienTop = alienArmy[0].getBoundingClientRect().top + 30;
-     
-      if(firstAlienTop-100 > newBullet.getBoundingClientRect().top ){
+
+      if (firstAlienTop - 100 > newBullet.getBoundingClientRect().top) {
         newBullet.remove();
       }
 
       alienArmy.forEach((alien, index) => {
-        if ( alien.getBoundingClientRect().top < newBullet.getBoundingClientRect().top + 20 &&
-          alien.getBoundingClientRect().top + 20 > newBullet.getBoundingClientRect().top &&
-          alien.getBoundingClientRect().left < newBullet.getBoundingClientRect().left + 20 &&
-            alien.getBoundingClientRect().left + 20 > newBullet.getBoundingClientRect().left
+        if (
+          alien.getBoundingClientRect().top <
+            newBullet.getBoundingClientRect().top + 20 &&
+          alien.getBoundingClientRect().top + 20 >
+            newBullet.getBoundingClientRect().top &&
+          alien.getBoundingClientRect().left <
+            newBullet.getBoundingClientRect().left + 20 &&
+          alien.getBoundingClientRect().left + 20 >
+            newBullet.getBoundingClientRect().left
         ) {
           document.getElementById(index).classList.add("hidden");
           newBullet.remove();
@@ -190,67 +209,73 @@ class Alien {
     const alienArmy = document.querySelectorAll(".enemy-box");
     function getRandomArbitrary(min, max) {
       return Math.round(Math.random() * (max - min) + min);
-    };
+    }
     let randomAlien = getRandomArbitrary(0, alienArmy.length);
     let alientop = alienArmy[randomAlien].style.top;
     let alienLeft = alienArmy[randomAlien].style.left;
-     console.log("alientop",alientop, "alienLeft", alienLeft, "alienId", randomAlien);
     let world = document.getElementById("game_window");
     const newAlienBullet = document.createElement("div");
     newAlienBullet.classList.add("bullet-box");
     newAlienBullet.innerHTML += `<div> </div>`;
-    newAlienBullet.style.top = alientop ;
-  // newAlienBullet.setAttribute("id", `test${id}`);
-     newAlienBullet.style.left = alienLeft ;
-   // id++;
+    newAlienBullet.style.top = alientop;
+    // newAlienBullet.setAttribute("id", `test${id}`);
+    newAlienBullet.style.left = alienLeft;
+    // id++;
     world.appendChild(newAlienBullet);
-   
+
     function alienBulletMove() {
       var speed = 1;
       var newAlienBulletMove = newAlienBullet.offsetTop;
       if (newAlienBulletMove < 700) {
-        newAlienBullet.style.top = newAlienBulletMove + speed  + "px";
+        newAlienBullet.style.top = newAlienBulletMove + speed + "px";
       } else {
         world.removeChild(newAlienBullet);
-        newAlienBullet.remove();  
+        newAlienBullet.remove();
         clearInterval(idBullMove);
       }
     }
 
-    function alienHitPlayer(){
+    function alienHitPlayer() {
       let world = document.getElementById("game_window");
       let bullet = newAlienBullet.style;
-      let worldObj = new World();
       let playerShip = document.getElementById("box");
+      let livesHold = document.getElementById("lives-hold");
+      if (
+        newAlienBullet.getBoundingClientRect().top <
+          playerShip.getBoundingClientRect().top + 20 &&
+        newAlienBullet.getBoundingClientRect().top + 20 >
+          playerShip.getBoundingClientRect().top &&
+        newAlienBullet.getBoundingClientRect().left <
+          playerShip.getBoundingClientRect().left + 20 &&
+        newAlienBullet.getBoundingClientRect().left + 20 >
+          playerShip.getBoundingClientRect().left
+      ) {
+        // supprime la balle
+        newAlienBullet.remove();
+        clearInterval(idBullMove);
 
-      if(newAlienBullet.getBoundingClientRect().top < playerShip.getBoundingClientRect().top +20 &&
-        newAlienBullet.getBoundingClientRect().top + 20 > playerShip.getBoundingClientRect().top &&
-        newAlienBullet.getBoundingClientRect().left < playerShip.getBoundingClientRect().left +20 &&
-        newAlienBullet.getBoundingClientRect().left + 20 > playerShip.getBoundingClientRect().left 
-        ){
-          let interval = setInterval(() => {
-            console.log("hit");
-            playerShip.style.display = "none";
-          }, 100);
-          setTimeout(() => {
-            clearInterval(interval);
-            playerShip.style.display = "";
-          }, 250);
+        let classLives = document.querySelector(".class-lives");
+        let livesHoldLenght = classLives.querySelectorAll(".heart").length;
 
-          console.log(this.playerLife );
-         
+        if(livesHoldLenght > 0){
+          livesHold.removeChild(livesHold.firstElementChild);
+        }
+        
+        let interval = setInterval(() => {
+          playerShip.style.display = "none";
+        }, 100);
+        setTimeout(() => {
+          clearInterval(interval);
+          playerShip.style.display = "";
+        }, 250);
       }
-     
-
     }
 
-
-  var idBullMove = setInterval(() => {
-    alienBulletMove();
-    alienHitPlayer();
-  }, 1 / 100);
-}
- 
+    var idBullMove = setInterval(() => {
+      alienBulletMove();
+      alienHitPlayer();
+    }, 1 / 100);
+  }
 
   //move the alien invaders
   moveInvaders() {
@@ -258,10 +283,11 @@ class Alien {
     let direction = "down";
     let lastDirection = "";
     let firstAlienLeft = alienArmy[0].getBoundingClientRect().left + 30;
-    let lastAlienRight = alienArmy[alienArmy.length - 1].getBoundingClientRect().left + 100;
+    let lastAlienRight =
+      alienArmy[alienArmy.length - 1].getBoundingClientRect().left + 100;
     let worldObj = new World();
-    this.alienShoot();  
-    
+    this.alienShoot();
+
     alienArmy.forEach((alien, index) => {
       const enemiesLeft = () => {
         if (alien.firstAlienLeft > 0) {

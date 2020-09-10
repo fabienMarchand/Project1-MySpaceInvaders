@@ -55,9 +55,6 @@ const startGame = (e) => {
    // gameSection.style.display = gameSection.style.display === 'none' ? '' : 'none';
     welcome.style.display = "none";
 
-    console.log("win: ", newGame.win);
-    console.log("lose: ", newGame.gameOver);
-
 
     // function repeatOften() {
     //   console.log("win: ", newGame.win);
