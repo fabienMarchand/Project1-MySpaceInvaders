@@ -46,32 +46,31 @@ let player = document.getElementById("box");
 const newGame = new World(world, world.offsetHeight, world.offsetWidth, alienInvaders);
 let welcome = document.getElementById("welcome-screen");
 let loseScreen = document.getElementById("lose-screen");
+let winScreen = document.getElementById("win-screen");
+let bulletBox = document.querySelectorAll("bullet-box")
 
-
-
-    function repeatOften() {
+function repeatOften() {
       if(loseScreen.style.display === "") {
         player.style.display = 'none';
-       
-
+        console.log("tralala");
+      } else if( winScreen.style.display === ""){
+        player.style.display = 'none';
+        const bulletArr = document.querySelectorAll(".bullet-box");
+        bulletArr.forEach((bullet) => (bullet.style.display = "none"));
       }
       requestAnimationFrame(repeatOften);
     }
     requestAnimationFrame(repeatOften);
 
-
-const startGame = (e) => {
-  if (e.keyCode === 13) {
-    document.removeEventListener("keydown", startGame);
-    newGame.addAliens();
-    newGame.startGame(player);
-    player.style.display = player.style.display === 'none' ? '' : 'none';
-   // gameSection.style.display = gameSection.style.display === 'none' ? '' : 'none';
-    welcome.style.display = "none";
-    
+  const startGame = (e) => {
+    if (e.keyCode === 13) {
+      document.removeEventListener("keydown", startGame);
+      newGame.addAliens();
+      newGame.startGame(player);
+      player.style.display = player.style.display === 'none' ? '' : 'none';
+     // gameSection.style.display = gameSection.style.display === 'none' ? '' : 'none';
+      welcome.style.display = "none";
+    }
   }
-}
-
-
-
-document.addEventListener("keydown", startGame);
+  
+  document.addEventListener("keydown", startGame);

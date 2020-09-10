@@ -24,7 +24,6 @@ export class World {
   }
 
   startGame(player) {
-    new Audio('../sounds/leap.midi').play();
     const ship = new Player();
     ship.health = 42;
     ship.player = player;
@@ -51,9 +50,7 @@ export class World {
   winGame() {
     const alienArmy = [...document.querySelectorAll(".enemy-box")];
     const alienArmyHidden = [...document.querySelectorAll(".hidden")];
-    alienArmy.length === alienArmyHidden.length
-      ? (this.win = true)
-      : (this.win = false);
+    alienArmy.length === alienArmyHidden.length ? (this.win = true) : (this.win = false);
     if (this.win) {
       let player = document.getElementById("box");
       player.style.display = "none";
@@ -84,6 +81,14 @@ class Player {
     this.strength = strength;
     this.player = player;
     this.bullet = [];
+  }
+
+  getBulletPos() {
+    let bulletListArray = [...document.querySelectorAll(".bullet-box")];
+    let rect = "";
+    let newPlayer = new Player();
+
+    return bulletListArray;
   }
 
   createBullet(posX, posY, MAXUP_BORDER, id) {
@@ -181,9 +186,8 @@ class Player {
   }
 }
 
-class Alien extends World {
+class Alien {
   constructor(alienInvaders, world, height, width, alien) {
-    super(world, height, width, alienInvaders);
     this.alienInvaders = alienInvaders;
     this.world = world;
     this.height = height;
@@ -199,9 +203,8 @@ class Alien extends World {
     this.world.appendChild(newAlien);
   }
 
-  alienShoot(alienArmy, parent) {
-    //const alienArmy = document.querySelectorAll(".enemy-box");
-
+  alienShoot(parent) {
+    const alienArmy = document.querySelectorAll(".enemy-box");
     function getRandomArbitrary(min, max) {
       return Math.round(Math.random() * (max - min) + min);
     }
@@ -235,7 +238,6 @@ class Alien extends World {
       let bullet = newAlienBullet.style;
       let playerShip = document.getElementById("box");
       let livesHold = document.getElementById("lives-hold");
-      
       if (
         newAlienBullet.getBoundingClientRect().top <
           playerShip.getBoundingClientRect().top + 20 &&
@@ -249,29 +251,29 @@ class Alien extends World {
         // supprime la balle
         newAlienBullet.remove();
         clearInterval(idBullMove);
+
         let classLives = document.querySelector(".class-lives");
         let livesHoldLenght = classLives.querySelectorAll(".heart").length;
-        if(livesHoldLenght > 0) livesHold.removeChild(livesHold.firstElementChild);
-         
+
+        if(livesHoldLenght > 0){
+          livesHold.removeChild(livesHold.firstElementChild);
+        }
+        
         let interval = setInterval(() => {
           playerShip.style.display = "none";
-          let classLiveslive = document.querySelector(".class-lives");
-          let livesHoldLenghtlive = classLiveslive.querySelectorAll(".heart")
-      
-         if(livesHoldLenghtlive.length > 0){
-         
-         } else {
-         
-          parent.loseGame();
-         }
         }, 100);
         setTimeout(() => {
           clearInterval(interval);
           playerShip.style.display = "";
-         
+          if(classLives.querySelectorAll(".heart").length === 0){
+          const objWorld = new World();
+          objWorld.loseGame();
+          }
+
+
+
         }, 250);
       }
-     
     }
 
     var idBullMove = setInterval(() => {
@@ -282,17 +284,14 @@ class Alien extends World {
 
   //move the alien invaders
   moveInvaders() {
-  //
-    const alienArmyFull = document.querySelectorAll(".enemy-box");
-    const alienArmy = [...alienArmyFull].filter((alien) => !alien.className.includes("hidden"));
-  //
-
+    const alienArmy = document.querySelectorAll(".enemy-box");
     let direction = "down";
     let lastDirection = "";
     let firstAlienLeft = alienArmy[0].getBoundingClientRect().left + 30;
-    let lastAlienRight = alienArmy[alienArmy.length - 1].getBoundingClientRect().left + 100;
-  //  let worldObj = new World();
-    this.alienShoot(alienArmy, this);
+    let lastAlienRight =
+      alienArmy[alienArmy.length - 1].getBoundingClientRect().left + 100;
+    let worldObj = new World();
+    this.alienShoot(this);
 
     alienArmy.forEach((alien, index) => {
       const enemiesLeft = () => {
@@ -314,16 +313,13 @@ class Alien extends World {
       };
 
       const enemiesDown = () => {
-        if (alien.style.top+50 > 600 + "px") {
-          
-          this.loseGame();
-          
+        if (alien.style.top > 600 + "px") {
+          worldObj.loseGame();
         } else {
           alien.style.top = alien.getBoundingClientRect().top + 1;
         }
 
         //        if( alien.style.top === )
-
         //  if (lastDirection === "right") {
         //    direction = "left";
         //  } else if (lastDirection === "left") {

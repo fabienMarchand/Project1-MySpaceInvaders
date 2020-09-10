@@ -70,9 +70,10 @@ ul li {
 .bullet-box {
   width: 18px;
   height: 18px;
-  background-color: white;
+  background-color: green;
   position: absolute;
   margin: 0;
+  border-radius:  50%;
 }
 
 .enemy-box {
