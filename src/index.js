@@ -49,18 +49,7 @@ let loseScreen = document.getElementById("lose-screen");
 let winScreen = document.getElementById("win-screen");
 const bulletArr = document.querySelectorAll(".bullet-box");
 
-function repeatOften() {
-      if(loseScreen.style.display === "") {
-        player.style.display = 'none';
 
-        bulletArr.forEach((bullet) => (bullet.style.display = "none"));
-      } else if( winScreen.style.display === ""){
-        player.style.display = 'none';
-        bulletArr.forEach((bullet) => (bullet.style.display = "none"));
-      }
-      requestAnimationFrame(repeatOften);
-    }
-    requestAnimationFrame(repeatOften);
 
   const startGame = (e) => {
     if (e.keyCode === 13) {
@@ -70,6 +59,20 @@ function repeatOften() {
       player.style.display = player.style.display === 'none' ? '' : 'none';
      // gameSection.style.display = gameSection.style.display === 'none' ? '' : 'none';
       welcome.style.display = "none";
+
+      function repeatOften() {
+        if(loseScreen.style.display === "") {
+          player.style.display = 'none';
+          bulletArr.forEach((bullet) => (bullet.style.display = "none"));
+        } else if( winScreen.style.display === ""){
+          player.style.display = 'none';
+          bulletArr.forEach((bullet) => (bullet.style.display = "none"));
+        }
+        requestAnimationFrame(repeatOften);
+      }
+      requestAnimationFrame(repeatOften);
+
+
     }
   }
   

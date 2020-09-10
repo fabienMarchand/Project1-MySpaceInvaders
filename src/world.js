@@ -288,7 +288,7 @@ class Alien {
     let lastAlienRight =
       alienArmy[alienArmy.length - 1].getBoundingClientRect().left + 100;
     let worldObj = new World();
-    this.alienShoot(this);
+    
 
     alienArmy.forEach((alien, index) => {
       const enemiesLeft = () => {
@@ -341,6 +341,7 @@ class Alien {
 
       enemiesMove();
     });
+    this.alienShoot(this);
   }
   // Interval cible:
   // invaderId = setInterval(() => this.moveInvaders(), 500);
