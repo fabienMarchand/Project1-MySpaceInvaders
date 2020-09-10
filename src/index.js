@@ -27,17 +27,17 @@ var alienInvaders = [
     { left: 800, top: 145 },
     { left: 870, top: 145 },
 
-    { left: 170, top: 190 },
-    { left: 240, top: 190 },
-    { left: 310, top: 190 },
-    { left: 380, top: 190 },
-    { left: 450, top: 190 },
-    { left: 520, top: 190 },
-    { left: 590, top: 190 },
-    { left: 660, top: 190 },
-    { left: 730, top: 190 },
-    { left: 800, top: 190 },
-    { left: 870, top: 190 },
+    // { left: 170, top: 190 },
+    // { left: 240, top: 190 },
+    // { left: 310, top: 190 },
+    // { left: 380, top: 190 },
+    // { left: 450, top: 190 },
+    // { left: 520, top: 190 },
+    // { left: 590, top: 190 },
+    // { left: 660, top: 190 },
+    // { left: 730, top: 190 },
+    // { left: 800, top: 190 },
+    // { left: 870, top: 190 },
   
   ];
 

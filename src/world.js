@@ -330,7 +330,7 @@ class Alien {
         this.lastDirection = "right";
       } else {
         if (index === 0) alien.style.left = alienMoveRight + 50;
-        console.log("after change direction: ", firstAlienLeft);
+        
         alien.style.left = alienMoveRight + 50;
       }
     });
@@ -355,7 +355,6 @@ class Alien {
   };
 
   enemiesMove = (alienArmy, firstAlienLeft, lastAlienRight) => {
-    console.log("da fuk: ", this.direction );
     switch (this.direction) {
       case "right":
         this.enemiesRight(alienArmy, firstAlienLeft, lastAlienRight);
