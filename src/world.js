@@ -15,11 +15,12 @@ export class World {
       this.alienInvaders,
       this.world,
       this.height,
-      this.width
+      this.width,
+      this.worldObj = this
     );
 
     this.alienInvaders.forEach((alien, index) => {
-      newAlien.drawEnemy(alien, index);
+      newAlien.drawEnemy(alien, index, this);
     });
   }
 
@@ -27,7 +28,7 @@ export class World {
     const ship = new Player();
     ship.health = 42;
     ship.player = player;
-    ship.movePlayer();
+    ship.movePlayer(ship, this);
   }
 
   setScore() {
@@ -53,13 +54,17 @@ export class World {
     alienArmy.length === alienArmyHidden.length
       ? (this.win = true)
       : (this.win = false);
-    if (this.win) {
+    if (this.win && !this.gameOver) {
       let player = document.getElementById("box");
       player.style.display = "none";
       let winScreen = document.getElementById("win-screen");
       winScreen.style.display = "";
       const bulletArr = document.querySelectorAll(".bullet-box");
       bulletArr.forEach((bullet) => (bullet.style.display = "none"));
+      console.log("you win");
+    //   setTimeout(function(){
+    //     window.location.reload(true);
+    //  }, 3000);
     }
     return this.win;
   }
@@ -74,6 +79,11 @@ export class World {
     winScreen.style.display = "";
     const bulletArr = document.querySelectorAll(".bullet-box");
     bulletArr.forEach((bullet) => (bullet.style.display = "none"));
+
+      setTimeout(function(){
+        window.location.reload(true);
+     }, 3000);
+     console.log("you lose");
   }
 }
 
@@ -93,7 +103,8 @@ class Player {
     return bulletListArray;
   }
 
-  createBullet(posX, posY, MAXUP_BORDER, id) {
+  createBullet(posX, posY, MAXUP_BORDER, id, worldObj) {
+
     function BulletMove() {
       var speed = 1;
       var newBulletMove = newBullet.offsetTop;
@@ -106,11 +117,10 @@ class Player {
       }
     }
 
-    function bulletHitAlien() {
+    function bulletHitAlien(worldObj) {
       //window frame
       let world = document.getElementById("game_window");
       let bullet = newBullet.style;
-      let worldObj = new World();
       const alienArmy = [...document.querySelectorAll(".enemy-box")];
       let firstAlienTop = alienArmy[0].getBoundingClientRect().top + 30;
 
@@ -133,16 +143,15 @@ class Player {
          
           newBullet.remove();
           worldObj.score += 20;
-          new Audio('../sounds/hitAlien.wav').play();
+          //new Audio('../sounds/hitAlien.wav').play();
           worldObj.setScore();
           worldObj.winGame();
-
         }
       });
     }
 
     let world = document.getElementById("game_window");
-    let newPlayer = new Player();
+    
     const newBullet = document.createElement("div");
     newBullet.classList.add("bullet-box");
     newBullet.innerHTML += `<div> </div>`;
@@ -153,11 +162,11 @@ class Player {
     world.appendChild(newBullet);
     var idBullMove = setInterval(() => {
       BulletMove();
-      bulletHitAlien();
+      bulletHitAlien(worldObj);
     }, 1 / 100);
   }
 
-  movePlayer() {
+  movePlayer(objPlayer, worldObj) {
     document.addEventListener("keydown", function (event) {
       //Todo voir comment le rendre plus objet friendly
       let shipRight = document.getElementById("box").offsetLeft;
@@ -172,10 +181,10 @@ class Player {
       let playerShip = document.getElementById("box");
       let speed = 15;
       let id = 0;
-      const objPlayer = new Player();
+      //const objPlayer = new Player();
       if (event.keyCode === 32) {
-        objPlayer.createBullet(shipUp, shipLeft, MAXUP_BORDER, id);
-        new Audio('../sounds/Blaster.mp3').play();
+        objPlayer.createBullet(shipUp, shipLeft, MAXUP_BORDER, id, worldObj);
+      //  new Audio('../sounds/Blaster.mp3').play();
       }
 
       // //Move Right
@@ -199,7 +208,6 @@ class Alien {
     this.height = height;
     this.width = width;
     this.newAlien = [];
-
     this.playerLife = 3;
     this.direction = "left";
     this.lastDirection = "";
@@ -211,17 +219,16 @@ class Alien {
     this.world.appendChild(newAlien);
   }
 
-  alienShoot(parent) {
+  alienShoot(worldObj) {
     const alienArmy = document.querySelectorAll(".enemy-box");
+    
     function getRandomArbitrary(min, max) {
       return Math.round(Math.random() * (max - min) + min);
     }
 
-       
-   
     
+    let randomAlien = getRandomArbitrary(0, alienArmy.length-1);
     
-    let randomAlien = getRandomArbitrary(0, alienArmy.length);
     let alientop = alienArmy[randomAlien].style.top;
     let alienLeft = alienArmy[randomAlien].style.left;
     let world = document.getElementById("game_window");
@@ -236,7 +243,7 @@ class Alien {
     world.appendChild(newAlienBullet);
     
     let nbBulletBox = document.querySelectorAll(".bullet-box").length;
-    if (nbBulletBox > 4){
+    if (nbBulletBox > 2){
       newAlienBullet.remove();
     }
     function alienBulletMove() {
@@ -251,11 +258,14 @@ class Alien {
       }
     }
 
-    function alienHitPlayer(parent) {
+    function alienHitPlayer() {
       let world = document.getElementById("game_window");
       let bullet = newAlienBullet.style;
       let playerShip = document.getElementById("box");
       let livesHold = document.getElementById("lives-hold");
+      let classLives = document.querySelector(".class-lives");
+      let livesHoldLenght = classLives.querySelectorAll(".heart").length;
+
       if (
         newAlienBullet.getBoundingClientRect().top <
           playerShip.getBoundingClientRect().top + 20 &&
@@ -266,13 +276,10 @@ class Alien {
         newAlienBullet.getBoundingClientRect().left + 20 >
           playerShip.getBoundingClientRect().left
       ) {
-        new Audio('../sounds/playerHit.wav').play();
+    //    new Audio('../sounds/playerHit.wav').play();
         // supprime la balle
         newAlienBullet.remove();
         clearInterval(idBullMove);
-
-        let classLives = document.querySelector(".class-lives");
-        let livesHoldLenght = classLives.querySelectorAll(".heart").length;
 
         if (livesHoldLenght > 0) {
           livesHold.removeChild(livesHold.firstElementChild);
@@ -281,20 +288,22 @@ class Alien {
         let interval = setInterval(() => {
           playerShip.style.display = "none";
         }, 100);
+
         setTimeout(() => {
           clearInterval(interval);
           playerShip.style.display = "";
           if (classLives.querySelectorAll(".heart").length === 0) {
-            const objWorld = new World();
-            objWorld.loseGame();
+            const worldObj = new World();
+            worldObj.loseGame();
           }
         }, 250);
+
       }
     }
 
     var idBullMove = setInterval(() => {
       alienBulletMove();
-      alienHitPlayer(parent);
+      alienHitPlayer();
     }, 1 / 100);
   }
 
@@ -308,7 +317,7 @@ class Alien {
       ""
     );
     this.enemiesMove(alienArmy, firstAlienLeft, lastAlienRight);
-    this.alienShoot(this);
+    this.alienShoot();
   }
 
   enemiesLeft = (alienArmy, firstAlienLeft, lastAlienRight) => {
