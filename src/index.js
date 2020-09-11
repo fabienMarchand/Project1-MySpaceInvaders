@@ -54,7 +54,7 @@ const bulletArr = document.querySelectorAll(".bullet-box");
   const startGame = (e) => {
     if (e.keyCode === 13) {
       document.removeEventListener("keydown", startGame);
-     new Audio('../sounds/leap.WAV').play();
+     new Audio('./../sounds/leap.WAV').play();
       newGame.addAliens();
       newGame.startGame(player);
       player.style.display = player.style.display === 'none' ? '' : 'none';
