@@ -61,7 +61,7 @@ export class World {
       winScreen.style.display = "";
       const bulletArr = document.querySelectorAll(".bullet-box");
       bulletArr.forEach((bullet) => (bullet.style.display = "none"));
-      console.log("you win");
+     // console.log("you win");
     //   setTimeout(function(){
     //     window.location.reload(true);
     //  }, 3000);
@@ -83,7 +83,7 @@ export class World {
       setTimeout(function(){
         window.location.reload(true);
      }, 3000);
-     console.log("you lose");
+    // console.log("you lose");
   }
 }
 
@@ -106,7 +106,7 @@ class Player {
   createBullet(posX, posY, MAXUP_BORDER, id, worldObj) {
 
     function BulletMove() {
-      var speed = 1;
+      var speed = 9;
       var newBulletMove = newBullet.offsetTop;
       if (newBulletMove > MAXUP_BORDER) {
         newBullet.style.top = newBulletMove + speed * -1 + "px";
@@ -143,7 +143,7 @@ class Player {
          
           newBullet.remove();
           worldObj.score += 20;
-          //new Audio('../sounds/hitAlien.wav').play();
+          new Audio('../sounds/hitAlien.wav').play();
           worldObj.setScore();
           worldObj.winGame();
         }
@@ -163,7 +163,7 @@ class Player {
     var idBullMove = setInterval(() => {
       BulletMove();
       bulletHitAlien(worldObj);
-    }, 1 / 100);
+    }, 1/100);
   }
 
   movePlayer(objPlayer, worldObj) {
@@ -184,7 +184,7 @@ class Player {
       //const objPlayer = new Player();
       if (event.keyCode === 32) {
         objPlayer.createBullet(shipUp, shipLeft, MAXUP_BORDER, id, worldObj);
-      //  new Audio('../sounds/Blaster.mp3').play();
+       new Audio('../sounds/Blaster.mp3').play();
       }
 
       // //Move Right
@@ -247,7 +247,7 @@ class Alien {
       newAlienBullet.remove();
     }
     function alienBulletMove() {
-      var speed = 1;
+      var speed = 5;
       var newAlienBulletMove = newAlienBullet.offsetTop;
       if (newAlienBulletMove < 700) {
         newAlienBullet.style.top = newAlienBulletMove + speed + "px";
@@ -276,7 +276,7 @@ class Alien {
         newAlienBullet.getBoundingClientRect().left + 20 >
           playerShip.getBoundingClientRect().left
       ) {
-    //    new Audio('../sounds/playerHit.wav').play();
+       new Audio('../sounds/playerHit.wav').play();
         // supprime la balle
         newAlienBullet.remove();
         clearInterval(idBullMove);
