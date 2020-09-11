@@ -196,3 +196,27 @@ ul li {
     transform: rotateX(180deg);
   }
 }
+
+.mobile-warning{
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  background: black;
+  min-width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+  text-align: center;
+  font-size: 3rem;
+}
+
+@media only screen and (max-width: 1100px) {
+  #game-area{
+    display: none;
+  }
+  .mobile-warning{
+    display: block;
+  }
+}
